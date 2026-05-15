@@ -1,56 +1,21 @@
 # Suis-Project 🎨🤖
 
-Welcome to **Suis-Project**, a cutting-edge Virtual Assistant application built with Flutter, featuring a unique pixel-art aesthetic and dynamic AI interactions.
+**Suis-Project** adalah aplikasi Virtual Assistant berbasis Flutter yang menggabungkan kecanggihan AI dengan estetika **Pixel Art** yang unik. Aplikasi ini dirancang untuk memberikan pengalaman interaksi yang futuristik namun tetap memiliki nuansa retro yang hangat.
 
-## ✨ Features
+## ✨ Apa itu Suis-Project?
 
-- **Pixel-Art UI**: Stunning retro-themed design with smooth animations.
-- **Dynamic AI Assistant**: Integrated chat system with real-time "thinking" indicators.
-- **Particle Visualizer**: Interactive pixel particle effects that react to interaction.
-- **Soundwave Visualizer**: Real-time audio visualization with a pixelated twist.
-- **Custom Themes**: Sleek dark modes and vibrant color palettes tailored for a premium feel.
+Aplikasi ini bukan sekadar chatbot biasa. Suis-Project berfokus pada pengalaman pengguna (UX) yang dinamis melalui:
 
-## 🚀 Getting Started
+- **Antarmuka Pixel-Art**: Desain visual yang dikurasi secara khusus untuk memberikan kesan premium dan nostalgia.
+- **Visualisasi Interaktif**: Dilengkapi dengan *Pixel Particle Visualizer* dan *Soundwave* yang bereaksi secara real-time saat berinteraksi.
+- **Asisten Virtual Pintar**: Integrasi sistem chat dengan indikator "thinking" yang animatif, menciptakan percakapan yang terasa lebih hidup.
+- **Sistem Tema Dinamis**: Mendukung mode gelap (Dark Mode) dengan palet warna yang harmonis dan nyaman di mata.
 
-### Prerequisites
+## 🛠️ Teknologi yang Digunakan
 
-- Flutter SDK (latest version)
-- Android Studio / VS Code
-- Git
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/nandaputrahartono-pc/Suis-Project.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd Suis-Project
-   ```
-3. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
-4. Run the app:
-   ```bash
-   flutter run
-   ```
-
-## 🛠️ Tech Stack
-
-- **Framework**: Flutter
-- **Language**: Dart
-- **State Management**: Provider
-- **Design**: Pixel Art & Custom CSS-like Styling in Flutter
-
-## 📖 Development Logbook
-
-### 2026-05-16
-- **Initial Setup**: Project initialization and repository linking.
-- **UI Enhancement**: Refined Chat Bubble UI and Virtual Assistant screens.
-- **Animation**: Implemented pixel-particle visualizer and typing indicators.
-- **Theme**: Added dynamic theme provider with premium dark mode support.
+- **Flutter & Dart**: Sebagai core framework pengembangan lintas platform.
+- **Provider**: Untuk manajemen state yang efisien dan responsif.
+- **Custom Pixel Engine**: Implementasi visualisasi partikel dan elemen UI kustom berbasis pixel.
 
 ---
-*Created with ❤️ by [Nanda Putra](https://github.com/nandaputrahartono-pc)*
+*Dikembangkan oleh [Nanda Putra](https://github.com/nandaputrahartono-pc)*
