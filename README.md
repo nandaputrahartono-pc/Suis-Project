@@ -11,6 +11,23 @@ Aplikasi ini bukan sekadar chatbot biasa. Suis-Project berfokus pada pengalaman 
 - **Asisten Virtual Pintar**: Integrasi sistem chat dengan indikator "thinking" yang animatif, menciptakan percakapan yang terasa lebih hidup.
 - **Sistem Tema Dinamis**: Mendukung mode gelap (Dark Mode) dengan palet warna yang harmonis dan nyaman di mata.
 
+## 🚀 Persiapan Pengembangan (Collaboration)
+
+Untuk kamu atau teman yang ingin menjalankan project ini secara lokal:
+
+1. **Clone Repository**:
+   ```bash
+   git clone https://github.com/nandaputrahartono-pc/Suis-Project.git
+   ```
+2. **Install Dependencies**:
+   ```bash
+   flutter pub get
+   ```
+3. **Run Application**:
+   ```bash
+   flutter run
+   ```
+
 ## 🛠️ Teknologi yang Digunakan
 
 - **Flutter & Dart**: Sebagai core framework pengembangan lintas platform.
