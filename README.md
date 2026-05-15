@@ -1,6 +1,6 @@
-# Suis-Project 🎨🤖
+# Welcome to Suis-Project 🎨🤖
 
-**Suis-Project** adalah aplikasi Virtual Assistant berbasis Flutter yang menggabungkan kecanggihan AI dengan estetika **Pixel Art** yang unik. Aplikasi ini dirancang untuk memberikan pengalaman interaksi yang futuristik namun tetap memiliki nuansa retro yang hangat.
+Selamat datang di **Suis-Project**, sebuah aplikasi Virtual Assistant berbasis Flutter yang menggabungkan kecanggihan AI dengan estetika **Pixel Art** yang unik. Aplikasi ini dirancang untuk memberikan pengalaman interaksi yang futuristik namun tetap memiliki nuansa retro yang hangat.
 
 ## ✨ Apa itu Suis-Project?
 
