@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatMessage {
@@ -71,10 +72,25 @@ class ChatProvider with ChangeNotifier {
   String? _currentSessionId;
   final String _storageKey = 'chat_sessions_v2'; // Changed key to avoid collision with v1
   bool _isLoading = false;
+  String _selectedModel = 'Queen';
+
+  // Backend URL — ganti sesuai environment
+  // Untuk Android Emulator: http://10.0.2.2:3000
+  // Untuk iOS Simulator / Desktop / Web: http://localhost:3000
+  // Untuk device fisik: http://<IP_KOMPUTER>:3000
+  static const String _backendUrl = 'http://192.168.1.21:3000';
 
   List<ChatSession> get sessions => _sessions;
   bool get isLoading => _isLoading;
   String? get currentSessionId => _currentSessionId;
+  String get selectedModel => _selectedModel;
+
+  void setModel(String model) {
+    if (_selectedModel != model) {
+      _selectedModel = model;
+      notifyListeners();
+    }
+  }
 
   ChatSession? get currentSession {
     try {
@@ -169,6 +185,23 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Konversi chat history ke format yang dibutuhkan Groq API.
+  /// Hanya kirim pesan user dan assistant (skip system/welcome message pertama).
+  List<Map<String, String>> _buildApiMessages(List<ChatMessage> messages) {
+    final apiMessages = <Map<String, String>>[];
+    for (final msg in messages) {
+      // Skip welcome message (pesan pertama dari AI saat sesi baru)
+      if (!msg.isUser && apiMessages.isEmpty && messages.indexOf(msg) == 0) {
+        continue;
+      }
+      apiMessages.add({
+        'role': msg.isUser ? 'user' : 'assistant',
+        'content': msg.text,
+      });
+    }
+    return apiMessages;
+  }
+
   Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty || _currentSessionId == null) return;
 
@@ -193,18 +226,50 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
     _saveSessions();
 
-    // Simulate AI delay
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      // Kirim chat history ke backend Fastify
+      final apiMessages = _buildApiMessages(session.messages);
+      
+      final response = await http.post(
+        Uri.parse('$_backendUrl/api/chat'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'messages': apiMessages,
+          'model': _selectedModel,
+        }),
+      ).timeout(const Duration(seconds: 30));
 
-    // Simple AI dummy response
-    final aiMsg = ChatMessage(
-      id: DateTime.now().toString(),
-      text: "Suis AI sedang memproses pesanmu: \"$text\". (Ini simulasi respons)",
-      isUser: false,
-      timestamp: DateTime.now(),
-    );
+      String aiText;
 
-    session.messages.add(aiMsg);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        aiText = data['response'] ?? 'Maaf, aku nggak bisa merespon saat ini.';
+      } else if (response.statusCode == 429) {
+        aiText = '⚠️ Wah, aku lagi capek nih. Coba lagi beberapa detik ya!';
+      } else {
+        final data = jsonDecode(response.body);
+        aiText = '⚠️ ${data['message'] ?? 'Terjadi kesalahan di server.'}';
+      }
+
+      final aiMsg = ChatMessage(
+        id: DateTime.now().toString(),
+        text: aiText,
+        isUser: false,
+        timestamp: DateTime.now(),
+      );
+      session.messages.add(aiMsg);
+
+    } catch (e) {
+      // Network error / timeout / backend mati
+      final errorMsg = ChatMessage(
+        id: DateTime.now().toString(),
+        text: '⚠️ Gagal terhubung ke server Suis AI. Pastikan backend sudah berjalan.',
+        isUser: false,
+        timestamp: DateTime.now(),
+      );
+      session.messages.add(errorMsg);
+    }
+
     _isLoading = false;
     notifyListeners();
     _saveSessions();
