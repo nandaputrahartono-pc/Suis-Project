@@ -26,7 +26,7 @@ class WordTiming {
 
 /// Provider untuk Virtual Assistant — continuous voice conversation.
 class VaProvider with ChangeNotifier {
-  static const String _backendUrl = 'http://localhost:3000';
+  static const String _backendUrl = 'http://10.0.2.2:3000';
 
   // Speech-to-Text
   final stt.SpeechToText _speech = stt.SpeechToText();
