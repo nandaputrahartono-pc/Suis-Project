@@ -1,6 +1,6 @@
 # Welcome to Suis-Project 🎨🤖
 
-Selamat datang di **Suis-Project**, sebuah project full-stack yang menggabungkan aplikasi Virtual Assistant berbasis Flutter dengan backend AI yang canggih. Project ini dirancang dengan estetika **Pixel Art** yang unik untuk memberikan pengalaman interaksi yang futuristik namun tetap memiliki nuansa retro yang hangat.
+Selamat datang di **Suis-Project**, sebuah project full-stack desktop yang menggabungkan aplikasi Virtual Assistant berbasis Flutter dengan backend AI yang canggih. Project ini dirancang khusus untuk platform desktop (**Windows**, **Linux**, dan **macOS**) dengan estetika **Pixel Art** yang unik untuk memberikan pengalaman interaksi yang futuristik namun tetap memiliki nuansa retro yang hangat.
 
 ---
 
@@ -8,19 +8,19 @@ Selamat datang di **Suis-Project**, sebuah project full-stack yang menggabungkan
 
 ```text
 suis-ai/
-├── virtual_projek/      # Aplikasi Mobile & Desktop (Flutter)
+├── virtual_projek/      # Aplikasi Desktop (Flutter - Windows, Linux, macOS)
 └── virtual_ai/          # Backend Service (TypeScript/Node.js + Fastify + Groq)
 ```
 
-- **`virtual_projek/`**: Antarmuka pengguna utama dengan visualisasi Pixel Art, sistem tema, dan pengolah suara.
-- **`virtual_ai/`**: Otak dari asisten virtual, memproses chat via Groq API dan melakukan konversi Text-To-Speech (TTS) super cepat.
+- **`virtual_projek/`**: Antarmuka pengguna desktop utama dengan visualisasi Pixel Art, sistem tema, dan pengolah suara.
+- **`virtual_ai/`**: Otak dari asisten virtual, memproses chat via Groq API dan menghasilkan suara TTS (Text-To-Speech) super cepat.
 
 ---
 
 ## ✨ Fitur Utama
 
-*   **Antarmuka Pixel-Art Premium**: Visual retro-futuristik yang dikurasi dengan cermat.
-*   **Real-time Voice Assistant**: Interaksi suara dua arah yang mulus secara hands-free.
+*   **Antarmuka Pixel-Art Premium**: Visual retro-futuristik desktop yang dikurasi dengan cermat.
+*   **Real-time Voice Assistant**: Interaksi suara dua arah yang mulus secara hands-free langsung di komputermu.
 *   **Pixel Particle & Soundwave Visualizer**: Efek visual dinamis yang merespons suara asisten secara real-time.
 *   **Multi-Model Engine**: Dukungan pergantian model AI (Queen, GPT, Claude) dengan deskripsi unik.
 *   **Dual Mode Theme**: Mode gelap (Dark Mode) dan terang dengan palet warna yang harmonis.
@@ -34,7 +34,6 @@ Sebelum memulai, pastikan perangkat kamu sudah memiliki perkakas berikut:
 *   **Flutter SDK** (Versi 3.19.x ke atas) -> [Unduh di sini](https://docs.flutter.dev/get-started/install)
 *   **Node.js** (Versi 18 ke atas) & **npm** -> [Unduh di sini](https://nodejs.org/)
 *   **Git** -> [Unduh di sini](https://git-scm.com/)
-*   **Android Studio** (untuk build Android) atau **Visual Studio** / **Clang** (untuk build Desktop)
 
 ---
 
@@ -74,25 +73,26 @@ Backend berfungsi sebagai API gateway untuk memproses teks lewat Groq dan mengha
     npm run dev
     ```
     > [!NOTE]
-    > Backend akan berjalan di `http://localhost:3000`. Jika port ini sudah terpakai, ubah variabel `PORT` di file `.env`.
+    > Backend secara default akan berjalan di `http://localhost:3000`. Jika port ini sudah terpakai, ubah variabel `PORT` di file `.env`.
 
 ---
 
 ### 3. Platform-Specific Setup & Run (Frontend)
-Masuk terlebih dahulu ke direktori frontend:
+
+Buka terminal baru, lalu masuk ke direktori frontend:
 ```bash
-cd ../virtual_projek
+cd virtual_projek
 flutter pub get
 ```
 
 #### 🪟 Windows Desktop
-1.  Pastikan **Developer Mode** aktif di Windows Settings kamu.
-2.  Instal **Visual Studio 2022** dengan beban kerja (workload) **"Desktop development with C++"** tercentang.
+1.  Pastikan **Developer Mode** sudah aktif di Windows Settings kamu (*Settings -> Update & Security -> For developers -> Developer Mode*).
+2.  Instal **Visual Studio 2022** dan pastikan mencentang beban kerja (workload) **"Desktop development with C++"** saat instalasi.
 3.  Aktifkan dukungan Windows Desktop di Flutter:
     ```bash
     flutter config --enable-windows-desktop
     ```
-4.  Cek kesiapan sistem:
+4.  Cek kesiapan sistem dengan perintah:
     ```bash
     flutter doctor
     ```
@@ -116,141 +116,87 @@ flutter pub get
     flutter run -d linux
     ```
 
-#### 🤖 Android Mobile (Build APK)
-1.  Pastikan **Android SDK** dan **Command-line Tools** sudah terinstal melalui Android Studio SDK Manager.
-2.  Setujui lisensi Android:
+#### 🍎 macOS Desktop
+1.  Pastikan **Xcode** sudah terinstal (bisa diunduh lewat Mac App Store) dan jalankan setup command line tools:
     ```bash
-    flutter doctor --android-licenses
+    sudo xcode-select --install
     ```
-3.  Untuk mem-build APK Release:
+2.  Instal **CocoaPods** untuk manajemen dependensi iOS/macOS:
     ```bash
-    flutter build apk --release
+    brew install cocoapods
     ```
-    *File APK hasil build akan berada di `build/app/outputs/flutter-apk/app-release.apk`.*
+3.  Aktifkan dukungan macOS Desktop di Flutter:
+    ```bash
+    flutter config --enable-macos-desktop
+    ```
+4.  Masuk ke folder macOS dan jalankan instalasi pods:
+    ```bash
+    cd macos && pod install && cd ..
+    ```
+5.  Jalankan aplikasi:
+    ```bash
+    flutter run -d macos
+    ```
 
 ---
 
-## 📡 Konfigurasi Jaringan & Debugging (SANGAT PENTING!)
+## 📡 Konfigurasi Jaringan & Debugging Desktop
 
-Agar aplikasi frontend dapat berkomunikasi dengan backend, kamu harus menyesuaikan alamat **`_backendUrl`** pada kode Flutter sesuai dengan perangkat yang kamu gunakan untuk debugging.
+Karena kamu mendevelop aplikasi **desktop** (Windows, Linux, macOS), frontend dan backend kamu berjalan pada **komputer fisik yang sama (Localhost)**.
 
-### 1. Tabel Konfigurasi IP Backend
+### 1. URL Backend Flutter (Out-of-the-Box)
+Secara default, kode Flutter di project ini sudah diatur untuk terhubung langsung ke **`http://localhost:3000`**. Kamu **tidak perlu** mengubah IP address apa pun di kode jika menjalankan aplikasi & backend di komputer yang sama!
 
-| Perangkat Debugging | URL Backend Flutter | Penjelasan |
-| :--- | :--- | :--- |
-| **Windows / Linux Desktop** | `http://localhost:3000` | Frontend dan Backend berjalan di satu mesin yang sama. |
-| **Android Emulator** | `http://10.0.2.2:3000` | Loopback IP khusus agar emulator Android bisa mengakses localhost PC. |
-| **Handphone Fisik (Android)** | `http://<IP_PC_KAMU>:3000` | Menggunakan IP lokal PC agar HP bisa mengaksesnya lewat jaringan Wi-Fi lokal. |
-
-### 2. Cara Mengubah URL Backend di Kode
-Kamu wajib mengubah nilai variabel `_backendUrl` pada 2 file berikut sebelum menjalankan aplikasi:
-
+Jika kamu perlu memeriksanya atau mengubah port backend di kemudian hari, nilai URL didefinisikan pada variabel `_backendUrl` di 2 file berikut:
 1.  **`virtual_projek/lib/providers/chat_provider.dart`** (Sekitar Baris 81)
     ```dart
-    static const String _backendUrl = 'http://192.168.1.21:3000'; // Ganti IP ini!
+    static const String _backendUrl = 'http://localhost:3000';
     ```
 2.  **`virtual_projek/lib/providers/va_provider.dart`** (Sekitar Baris 29)
     ```dart
-    static const String _backendUrl = 'http://192.168.1.21:3000'; // Ganti IP ini!
+    static const String _backendUrl = 'http://localhost:3000';
     ```
+
+### 2. Cara Melakukan Debugging Desktop
+
+1.  Pastikan Backend Fastify sudah berjalan di terminal kamu (`npm run dev` di folder `virtual_ai`).
+2.  Gunakan editor pilihanmu (**VS Code** atau **Android Studio**):
+    *   **VS Code**: Buka folder `virtual_projek`, pilih perangkat desktop kamu di bagian kanan bawah (Windows/Linux/macOS), lalu tekan `F5` untuk menjalankan dengan debugger lengkap.
+    *   **Terminal**: Cukup ketik perintah `flutter run` di folder `virtual_projek` dan pilih target desktopmu.
+3.  **Hot Reload**: Selama debugging aktif, kamu cukup menekan tombol `r` di terminal atau menekan `Ctrl+S` / `Cmd+S` di VS Code untuk melihat perubahan tampilan secara instan tanpa perlu mem-build ulang!
 
 ---
 
-## 💻 Panduan Lengkap Debugging di Android
+## ⚠️ Gotchas & Solusi Masalah Umum Desktop
 
-### A. Debugging via Android Emulator (AVD)
-
-1.  Buka **Android Studio** -> **Device Manager** -> Jalankan salah satu emulator pilihanmu.
-2.  Ubah `_backendUrl` di kedua file Dart di atas menjadi:
-    ```dart
-    static const String _backendUrl = 'http://10.0.2.2:3000';
+### 1. macOS Sandboxing & Izin Jaringan
+Secara default, aplikasi desktop macOS berjalan dalam mode *Sandbox* yang membatasi aplikasi untuk mengakses jaringan internet/localhost.
+*   **Solusi**: Project ini sudah dikonfigurasi secara proaktif agar dapat menembus Sandbox untuk tujuan development. Kunci berikut telah ditambahkan di `DebugProfile.entitlements` dan `Release.entitlements`:
+    ```xml
+    <key>com.apple.security.network.client</key>
+    <true/>
     ```
-3.  Jalankan aplikasi ke emulator melalui terminal:
+*   Jika aplikasi macOS tidak bisa terhubung ke backend, pastikan file entitlement kamu di folder `macos/Runner/` telah memiliki kunci di atas.
+
+### 2. macOS Microphone Permission (Izin Mikrofon)
+Untuk menggunakan asisten suara di macOS, sistem memerlukan izin akses mikrofon.
+*   **Solusi**: Deskripsi izin berikut sudah dipasang di `macos/Runner/Info.plist`:
+    ```xml
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Aplikasi ini memerlukan akses ke mikrofon untuk fitur asisten suara.</string>
+    ```
+*   Saat pertama kali menggunakan fitur voice assistant, pastikan memilih **"Allow"** pada pop-up sistem yang muncul.
+
+### 3. Masalah Driver Audio di Linux (ALSA/PulseAudio)
+*   **Gejala**: Suara asisten TTS tidak berbunyi atau terjadi error pemutaran audio di Linux.
+*   **Solusi**: Pastikan dependensi audio Linux kamu sudah terinstal lengkap. Jalankan:
     ```bash
-    flutter run -d emulator
-    ```
-    *(Atau klik tombol **Run/Debug** di VS Code setelah memilih emulator).*
-
----
-
-### B. Debugging via Handphone Fisik (Real Device) - USB Debugging
-
-Ini adalah cara terbaik untuk menguji fitur Voice Assistant karena mikrofon bawaan HP asli jauh lebih jernih dan akurat dibanding mikrofon emulator!
-
-#### Langkah 1: Aktifkan Developer Options & USB Debugging di HP
-1.  Buka **Settings (Pengaturan)** di HP Android kamu.
-2.  Masuk ke **About Phone (Tentang Ponsel)**.
-3.  Cari **Build Number (Nomor Bentukan)** lalu **ketuk sebanyak 7 kali** dengan cepat hingga muncul notifikasi *"Anda sekarang adalah pengembang!"*.
-4.  Kembali ke menu utama Settings -> Cari **Developer Options (Opsi Pengembang)**.
-5.  Cari dan **Aktifkan USB Debugging (Debugging USB)**.
-
-#### Langkah 2: Hubungkan HP ke Laptop/PC
-1.  Hubungkan HP ke komputer menggunakan kabel USB berkualitas baik.
-2.  Di layar HP akan muncul pop-up otorisasi *"Izinkan debugging USB?"*. Centang **"Selalu izinkan dari komputer ini"** lalu ketuk **OK**.
-3.  Verifikasi apakah HP sudah terdeteksi oleh Flutter dengan mengetikkan perintah ini di terminal PC:
-    ```bash
-    flutter devices
-    ```
-    *HP kamu harus muncul di daftar perangkat yang aktif.*
-
-#### Langkah 3: Samakan Koneksi Wi-Fi & Cari IP PC
-1.  **SANGAT PENTING**: HP dan Laptop/PC kamu harus terhubung ke **jaringan Wi-Fi yang sama** (satu router/hotspot).
-2.  Cari tahu IP Address lokal PC kamu:
-    *   **Linux (Ubuntu/Debian)**: Jalankan `hostname -I` atau `ifconfig` di terminal. (Contoh IP: `192.168.1.15`).
-    *   **Windows**: Jalankan `ipconfig` di Command Prompt (Cari baris `IPv4 Address` di bagian Wi-Fi adapter).
-3.  Ubah variabel `_backendUrl` di file `chat_provider.dart` dan `va_provider.dart` dengan IP tersebut:
-    ```dart
-    static const String _backendUrl = 'http://192.168.1.15:3000';
+    sudo apt-get install -y libasound2-dev libpulse-dev
     ```
 
-#### Langkah 4: Jalankan Debugging
-Jalankan perintah berikut di terminal:
-```bash
-flutter run
-```
-Pilih nomor indeks HP kamu yang muncul pada daftar. Sekarang kamu bisa memanfaatkan fitur **Hot Reload** (tekan `r` di terminal) dan log error real-time akan muncul langsung di layar monitormu!
-
----
-
-### C. Debugging Tanpa Kabel (Wireless Debugging via Wi-Fi)
-
-Jika kabel USB kamu sering longgar, kamu bisa melakukan debug secara nirkabel!
-
-1.  Hubungkan HP dengan kabel USB terlebih dahulu (sekali saja untuk inisialisasi port).
-2.  Pastikan HP dan PC berada di Wi-Fi yang sama.
-3.  Jalankan perintah ini di terminal PC untuk mengaktifkan mode TCP/IP pada port `5555`:
-    ```bash
-    adb tcpip 5555
-    ```
-4.  Cabut kabel USB dari HP.
-5.  Cari IP Address HP kamu (di HP: *Settings -> About Phone -> Status -> IP Address*, misal: `192.168.1.50`).
-6.  Hubungkan secara nirkabel melalui terminal PC:
-    ```bash
-    adb connect 192.168.1.50:5555
-    ```
-7.  Jalankan `flutter devices` untuk memastikan HP nirkabel kamu sudah terbaca sebagai perangkat debug.
-8.  Ketik `flutter run` untuk mulai debugging tanpa kabel!
-
----
-
-## ⚠️ Gotchas & Solusi Masalah Umum
-
-### 1. Error: "Connection refused" atau "Failed to connect to..." di HP/Emulator
-*   **Penyebab**: Alamat IP PC salah, port 3000 diblokir oleh Firewall PC, atau HP/PC tidak satu Wi-Fi.
-*   **Solusi**:
-    1.  Cek kembali IP PC kamu menggunakan `hostname -I` atau `ipconfig`.
-    2.  Matikan sementara Firewall PC atau izinkan koneksi masuk (*inbound rules*) untuk Port 3000.
-    3.  Pastikan koneksi Wi-Fi HP tidak dalam mode "Isolated/Guest Network".
-
-### 2. Suara Voice Assistant Tidak Terdengar di HP
-*   **Penyebab**: Aplikasi tidak memiliki izin mikrofon atau volume media HP mati.
-*   **Solusi**:
-    *   Pastikan baris `<uses-permission android:name="android.permission.RECORD_AUDIO" />` sudah ada di `android/app/src/main/AndroidManifest.xml` (fitur ini sudah terpasang secara default di project ini).
-    *   Izinkan akses mikrofon saat pertama kali aplikasi meminta izin di HP.
-
-### 3. Masalah CORS (Cross-Origin Resource Sharing)
-*   **Penyebab**: Browser atau perangkat memblokir request karena domain berbeda.
-*   **Solusi**: Backend Fastify kami sudah dikonfigurasi dengan `@fastify/cors` untuk menerima request dari origin mana pun secara aman selama proses pengembangan.
+### 4. Windows Developer Mode Error
+*   **Gejala**: Flutter tidak bisa mem-build aplikasi Windows Desktop.
+*   **Solusi**: Buka Pengaturan Windows -> Cari "Developer Settings" -> Aktifkan tombol **Developer Mode**.
 
 ---
 *Dikembangkan dengan penuh cinta dan dedikasi oleh [Nanda Putra](https://github.com/nandaputrahartono-pc)* 🚀
