@@ -78,7 +78,7 @@ class ChatProvider with ChangeNotifier {
   // Untuk Android Emulator: http://10.0.2.2:3000
   // Untuk iOS Simulator / Desktop / Web: http://localhost:3000
   // Untuk device fisik: http://<IP_KOMPUTER>:3000
-  static const String _backendUrl = 'http://10.0.2.2:3000';
+  static const String _backendUrl = 'http://192.168.1.21:3000';
 
   List<ChatSession> get sessions => _sessions;
   bool get isLoading => _isLoading;
