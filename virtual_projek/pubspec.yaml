@@ -41,6 +41,7 @@ dependencies:
   speech_to_text: ^7.3.0
   audioplayers: ^6.6.0
   path_provider: ^2.1.5
+  network_info_plus: ^8.1.0
 
 dev_dependencies:
   flutter_test:

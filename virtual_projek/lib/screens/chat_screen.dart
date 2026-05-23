@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../providers/chat_provider.dart';
 import '../providers/theme_provider.dart';
+import '../services/backend_config.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/chat_drawer.dart';
 import '../widgets/pixel_typing_indicator.dart';
@@ -33,10 +34,91 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  void _showConnectionInfo(BuildContext context) {
+    final backendConfig = Provider.of<BackendConfig>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final isDark = themeProvider.isDarkMode;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: isDark ? AppTheme.darkCard : AppTheme.lightCard,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        title: Text(
+          'Koneksi Server',
+          style: GoogleFonts.vt323(
+            fontSize: 24,
+            color: isDark ? AppTheme.neonGreen : AppTheme.deepPurple,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Status: ${backendConfig.status}',
+              style: GoogleFonts.vt323(
+                fontSize: 18,
+                color: backendConfig.status == 'Terhubung'
+                    ? (isDark ? AppTheme.neonGreen : AppTheme.darkGreen)
+                    : Colors.orange,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Server: ${backendConfig.baseUrl}',
+              style: GoogleFonts.vt323(
+                fontSize: 16,
+                color: isDark ? AppTheme.darkText : AppTheme.lightText,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Auto-discovery akan mencari server\ndi jaringan WiFi yang sama secara otomatis.',
+              style: GoogleFonts.vt323(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Tutup',
+              style: GoogleFonts.vt323(fontSize: 18, color: Colors.grey),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              backendConfig.autoDiscover();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Mencari server di jaringan...',
+                    style: GoogleFonts.vt323(fontSize: 16),
+                  ),
+                  backgroundColor: isDark ? AppTheme.neonGreen : AppTheme.deepPurple,
+                ),
+              );
+            },
+            child: Text(
+              'Scan Ulang',
+              style: GoogleFonts.vt323(
+                fontSize: 18,
+                color: isDark ? AppTheme.neonGreen : AppTheme.deepPurple,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final chatProvider = Provider.of<ChatProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final backendConfig = Provider.of<BackendConfig>(context);
     final isDark = themeProvider.isDarkMode;
 
     final messages = chatProvider.currentMessages;
@@ -46,6 +128,21 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: const Text('Suis AI'),
         actions: [
+          // Connection status indicator
+          IconButton(
+            icon: Icon(
+              backendConfig.isDiscovering
+                  ? Icons.wifi_find
+                  : backendConfig.status == 'Terhubung'
+                      ? Icons.wifi
+                      : Icons.wifi_off,
+              color: backendConfig.status == 'Terhubung'
+                  ? (isDark ? AppTheme.neonGreen : AppTheme.darkGreen)
+                  : Colors.orange,
+            ),
+            onPressed: () => _showConnectionInfo(context),
+            tooltip: backendConfig.status,
+          ),
           IconButton(
             icon: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
             onPressed: () => themeProvider.toggleTheme(),

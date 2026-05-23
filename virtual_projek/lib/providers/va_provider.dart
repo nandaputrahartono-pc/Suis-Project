@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
+import '../services/backend_config.dart';
 
 /// Data timing setiap kata dari Edge TTS.
 class WordTiming {
@@ -26,7 +27,8 @@ class WordTiming {
 
 /// Provider untuk Virtual Assistant — continuous voice conversation.
 class VaProvider with ChangeNotifier {
-  static const String _backendUrl = 'http://192.168.1.21:3000';
+  final BackendConfig _backendConfig;
+  String get _backendUrl => _backendConfig.baseUrl;
 
   // Speech-to-Text
   final stt.SpeechToText _speech = stt.SpeechToText();
@@ -72,7 +74,7 @@ class VaProvider with ChangeNotifier {
   bool get isUserTurn => _isUserTurn;
   bool get isActive => _isListening || _isProcessing || _isSpeaking;
 
-  VaProvider() {
+  VaProvider(this._backendConfig) {
     _initSpeech();
     _initAudioPlayer();
   }

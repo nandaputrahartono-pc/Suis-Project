@@ -5,16 +5,21 @@ import 'theme/app_theme.dart';
 import 'providers/theme_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/va_provider.dart';
+import 'services/backend_config.dart';
 import 'screens/chat_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final backendConfig = BackendConfig();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
-        ChangeNotifierProvider(create: (_) => VaProvider()),
+        ChangeNotifierProvider.value(value: backendConfig),
+        ChangeNotifierProvider(create: (_) => ChatProvider(backendConfig)),
+        ChangeNotifierProvider(create: (_) => VaProvider(backendConfig)),
       ],
       child: const MyApp(),
     ),

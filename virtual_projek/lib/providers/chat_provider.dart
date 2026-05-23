@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/backend_config.dart';
 
 class ChatMessage {
   final String id;
@@ -68,17 +69,14 @@ class ChatSession {
 }
 
 class ChatProvider with ChangeNotifier {
+  final BackendConfig _backendConfig;
   List<ChatSession> _sessions = [];
   String? _currentSessionId;
   final String _storageKey = 'chat_sessions_v2'; // Changed key to avoid collision with v1
   bool _isLoading = false;
   String _selectedModel = 'Queen';
 
-  // Backend URL — ganti sesuai environment
-  // Untuk Android Emulator: http://10.0.2.2:3000
-  // Untuk iOS Simulator / Desktop / Web: http://localhost:3000
-  // Untuk device fisik: http://<IP_KOMPUTER>:3000
-  static const String _backendUrl = 'http://192.168.1.21:3000';
+  String get _backendUrl => _backendConfig.baseUrl;
 
   List<ChatSession> get sessions => _sessions;
   bool get isLoading => _isLoading;
@@ -102,7 +100,7 @@ class ChatProvider with ChangeNotifier {
 
   List<ChatMessage> get currentMessages => currentSession?.messages ?? [];
 
-  ChatProvider() {
+  ChatProvider(this._backendConfig) {
     _loadSessions();
   }
 
