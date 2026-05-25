@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "@fastify/cors": "^11.0.1",
+    "@fastify/static": "^9.1.3",
     "dotenv": "^16.5.0",
     "edge-tts-universal": "^1.4.0",
     "fastify": "^5.3.3",

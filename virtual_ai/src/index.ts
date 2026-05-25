@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { chatRoutes } from './routes/chat.js';
 
 /**
@@ -37,6 +40,14 @@ async function main() {
 
   // Register routes
   await fastify.register(chatRoutes);
+
+  // Serve static files (VRM models, etc.) dari folder public/
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '..', 'public'),
+    prefix: '/',
+  });
 
   // Root route
   fastify.get('/', async () => {

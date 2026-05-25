@@ -61,6 +61,9 @@ class VaProvider with ChangeNotifier {
 
   // Cooldown — prevent rapid restart cycles
   bool _isRestarting = false;
+  
+  // Context Animasi (VRMA)
+  String _animationContext = 'idle';
 
   // Getters
   bool get isListening => _isListening;
@@ -73,6 +76,7 @@ class VaProvider with ChangeNotifier {
   String get subtitle => _subtitle;
   bool get isUserTurn => _isUserTurn;
   bool get isActive => _isListening || _isProcessing || _isSpeaking;
+  String get animationContext => _animationContext;
 
   VaProvider(this._backendConfig) {
     _initSpeech();
@@ -111,6 +115,7 @@ class VaProvider with ChangeNotifier {
     _audioPlayer.onPlayerComplete.listen((_) {
       _isSpeaking = false;
       _isSpeakingWord = false;
+      _animationContext = 'idle';
       _cancelTimers();
 
       // Subtitle TETAP tampil — tidak di-clear
@@ -187,6 +192,7 @@ class VaProvider with ChangeNotifier {
     _isSpeakingWord = false;
     _isMuted = false;
     _isRestarting = false;
+    _animationContext = 'idle';
     _subtitle = '';
     _fullAiResponse = '';
     _isUserTurn = true;
@@ -304,6 +310,23 @@ class VaProvider with ChangeNotifier {
     _isSpeakingWord = false;
     _subtitle = '';
     _isUserTurn = false;
+
+    // Tentukan context animasi berdasarkan user text dan ai text
+    final lowerUserText = _lastRecognizedText.toLowerCase();
+    final lowerAiText = text.toLowerCase();
+    
+    final greetingKeywords = ['halo', 'hai', 'helo', 'nama', 'siapa', 'pencipta', 'diciptakan', 'kamu itu', 'kamu tuh'];
+    bool isGreeting = false;
+    
+    for (final keyword in greetingKeywords) {
+      if (lowerUserText.contains(keyword) || lowerAiText.contains(keyword)) {
+        isGreeting = true;
+        break;
+      }
+    }
+    
+    _animationContext = isGreeting ? 'greeting' : 'normal';
+
     notifyListeners();
 
     try {
